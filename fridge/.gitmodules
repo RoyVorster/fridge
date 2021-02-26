@@ -1,3 +1,0 @@
-[submodule "components/mcp9808"]
-	path = components/mcp9808
-	url = https://github.com/unidentifieddeveloper/esp-mcp9808

@@ -1,3 +1,0 @@
-[submodule "fridge/lib/ESPAsyncWebServer"]
-	path = fridge/lib/ESPAsyncWebServer
-	url = git@github.com:me-no-dev/ESPAsyncWebServer

@@ -2,6 +2,7 @@
 #include "esp_system.h"
 
 #include "mcp9808.h"
+#include "ESPAsyncWebServer.h"
 
 extern "C" {
     void app_main(void);
