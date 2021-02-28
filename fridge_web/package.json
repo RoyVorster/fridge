@@ -1,0 +1,13 @@
+{
+  "name": "fridge_web",
+  "version": "1.0.0",
+  "description": "Fridge web interface",
+  "author": "Roy Vorster",
+  "scripts": {
+    "build": "webpack"
+  },
+  "devDependencies": {
+    "webpack": "^5.24.2",
+    "webpack-cli": "^4.5.0"
+  }
+}
