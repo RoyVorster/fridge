@@ -1,0 +1,15 @@
+menu "fridge"
+
+config WIFI_SSID
+    string "WIFI SSID"
+    default "AIVD busje"
+
+config WIFI_PWD
+    string "WIFI password"
+    default "Rotopjim"
+
+config MQTT_BROKER_URL
+    string "MQTT broker URL"
+    default "eltigre"
+
+endmenu

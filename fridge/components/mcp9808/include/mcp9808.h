@@ -25,29 +25,27 @@
 #define A0 false
 #define A1 false
 #define A2 false
+#define MCP9808_ADDR 0b0011000 | (A2 << 4) | (A1 << 5) | (A0 << 6)
 
 
-i2c_config_t init_sensor();
-uint8_t gen_device_address();
-
-class Sensor {
-public:
-    Sensor();
-
-    esp_err_t initialize();
-    float get_temperature();
-
-private:
+typedef struct {
     i2c_config_t conf;
     uint8_t device_address;
+    float temperature;
+} MCP9808_t;
 
-    esp_err_t read_bytes(uint8_t reg, uint8_t* data, size_t size);
-    esp_err_t write_bytes(uint8_t reg, uint8_t* data, size_t size);
+MCP9808_t init_sensor();
+esp_err_t setup_sensor(MCP9808_t *device);
 
-    uint8_t read_8(uint8_t reg);
-    uint16_t read_16(uint8_t reg);
-    void write_16(uint8_t reg, uint16_t data);
-    void write_8(uint8_t reg, uint8_t data);
-};
+esp_err_t read_bytes(MCP9808_t *device, uint8_t reg, uint8_t* data, size_t size);
+esp_err_t write_bytes(MCP9808_t *device, uint8_t reg, uint8_t* data, size_t size);
+
+uint8_t read_8(MCP9808_t *device, uint8_t reg);
+uint16_t read_16(MCP9808_t *device, uint8_t reg);
+void write_16(MCP9808_t *device, uint8_t reg, uint16_t data);
+void write_8(MCP9808_t *device, uint8_t reg, uint8_t data);
+
+void get_temperature(MCP9808_t *device);
+
 
 #endif // _MCP9808

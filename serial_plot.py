@@ -10,7 +10,7 @@ n_plot = 20
 ydat = [0.]*n_plot 
 xdat = list(range(0, n_plot))
 
-serial_in = serial.Serial('/dev/ttyUSB0', 115200)
+serial_in = serial.Serial('/dev/ttyUSB1', 115200)
 
 fig, ax = plt.subplots()
 ax.axis([0, n_plot - 1, 0, 40])
