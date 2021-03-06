@@ -107,7 +107,6 @@ void init_wifi(void) {
 
     EventBits_t bits = xEventGroupWaitBits(wifi_event_bits, WIFI_CONNECTED_BIT | WIFI_FAILED_BIT, pdFALSE, pdFALSE, portMAX_DELAY);
     if (bits & WIFI_CONNECTED_BIT) {
-        // printf("Connected to wifi %s\n", WIFI_SSID);
         printf("Connected to wifi " WIFI_SSID "\n");
     } else if (bits & WIFI_FAILED_BIT) {
         printf("Failed to connect to wifi " WIFI_SSID "\n");
