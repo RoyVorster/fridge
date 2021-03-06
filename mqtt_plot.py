@@ -2,7 +2,7 @@ import paho.mqtt.client as mqtt
 import struct
 
 # MQTT Broker
-host = 'eltigre'
+host = 'localhost'
 port = 1883
 topic = 'fridge/temperature'
 
