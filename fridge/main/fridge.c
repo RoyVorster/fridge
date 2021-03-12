@@ -121,7 +121,7 @@ esp_mqtt_client_handle_t init_mqtt(void) {
     mqtt_event_bits = xEventGroupCreate();
 
     esp_mqtt_client_config_t mqtt_conf = {
-        .uri = MQTT_BROKER_URL,
+        .uri = "mqtt://" MQTT_BROKER_URL ":1883",
         .event_handle = event_handler_mqtt,
         .client_id = "publish",
     };
