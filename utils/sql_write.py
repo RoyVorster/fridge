@@ -21,7 +21,7 @@ def on_connect(client, userdata, flags, respons_code):
 
 
 def on_message(client, userdata, msg):
-    global t_buffer, local_buffer, local_buffer_counter
+    global t_buffer, n_counter
 
     temperature_msg = struct.unpack('f', msg.payload)[0]
     if n_counter >= n_average + 1:
