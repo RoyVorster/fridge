@@ -1,19 +1,27 @@
 import psycopg2
 
-CONNECTION = 'postgres://rvorster:secret@localhost:5432/rvorster'
+CONNECTION = 'postgres://rvorster:secret@192.168.0.180:5432/rvorster'
+
 
 def execute_query(query, values=()):
     with psycopg2.connect(CONNECTION) as conn:
         cur = conn.cursor()
-        cur.execute(query, values)
-        data = cur.fetchall()
+        data = []
 
-        conn.commit()
-        cur.close()
+        try:
+            cur.execute(query, values)
+            data = cur.fetchall()
+            conn.commit()
+        except:
+            pass
+        finally:
+            cur.close()
+
         return data
 
+
 def init_db():
-    query = '''
+    init_query = '''
         CREATE TABLE IF NOT EXISTS fridge_sensors (
             sensor_id INTEGER PRIMARY KEY,
             sensor_descr TEXT
@@ -31,7 +39,8 @@ def init_db():
         INSERT INTO fridge_sensors VALUES (0, 'Temperature');
     '''
 
-    execute_query(query);
+    execute_query(init_query);
+
 
 if __name__ == '__main__':
     init_db()
