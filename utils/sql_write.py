@@ -24,7 +24,7 @@ def on_message(client, userdata, msg):
     global t_buffer, n_counter
 
     temperature_msg = struct.unpack('f', msg.payload)[0]
-    if n_counter >= n_average + 1:
+    if n_counter >= n_average - 1:
         temperature = (t_buffer + temperature_msg)/n_average
         n_counter, t_buffer = 0, 0
 
