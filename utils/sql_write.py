@@ -26,7 +26,7 @@ def on_message(client, userdata, msg):
     temperature_msg = struct.unpack('f', msg.payload)[0]
     if n_counter >= n_average + 1:
         temperature = (t_buffer + temperature_msg)/n_average
-        n_counter = 0
+        n_counter, t_buffer = 0, 0
 
         query = '''
             INSERT INTO fridge_data VALUES (%s, NOW(), %s);
