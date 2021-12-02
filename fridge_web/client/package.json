@@ -1,0 +1,26 @@
+{
+  "name": "fridgeui",
+  "version": "0.1.0",
+  "description": "Quick plotting fridge temperatures for make benefit great nation of kazachstan",
+  "main": "src/app.ts",
+  "author": "Roy Vorster",
+  "license": "MIT",
+  "scripts": {
+    "build": "webpack"
+  },
+  "dependencies": {
+    "@types/node": "^16.11.11",
+    "axios": "^0.24.0",
+    "chart.js": "^3.6.1",
+    "typescript": "^4.5.2"
+  },
+  "devDependencies": {
+    "css-loader": "^6.5.1",
+    "html-webpack-plugin": "^5.5.0",
+    "style-loader": "^3.3.1",
+    "ts-loader": "^9.2.6",
+    "ts-node": "^10.4.0",
+    "webpack": "^5.64.4",
+    "webpack-cli": "^4.9.1"
+  }
+}
