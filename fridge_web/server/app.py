@@ -19,11 +19,13 @@ def get_data():
     sensor_id = request.json['sensor_id']
 
     query = '''
-        SELECT time_bucket(%s, time) AS t, avg(data) as d
-        FROM fridge.data
-        WHERE sensor_id = %s
-        GROUP BY t
-        ORDER BY t DESC LIMIT %s;
+        SELECT t, d FROM (
+            SELECT time_bucket(%s, time) AS t, avg(data) as d
+            FROM fridge.data
+            WHERE sensor_id = %s
+            GROUP BY t
+            ORDER BY t DESC LIMIT %s
+        ) tt ORDER BY t ASC;
     '''
     values = (interval, sensor_id, n_points)
     res = exec_query(query, values)
