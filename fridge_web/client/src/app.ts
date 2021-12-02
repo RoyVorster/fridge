@@ -12,6 +12,7 @@ let chart = new Chart(canvas, {
         datasets: [{
             data: [0],
             label: "Fridge temperature",
+            borderColor: 'rgb(3, 98, 252)',
         }],
     },
     options: {
