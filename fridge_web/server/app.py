@@ -10,7 +10,7 @@ cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
 # paho MQTT setup
-HOST, PORT, TOPIC = '192.168.0.180', 1883, 'fridge/temperature'
+HOST, PORT, TOPIC = 'localhost', 1883, 'fridge/temperature'
 
 @app.route('/data', methods=['POST'])
 def get_data():
@@ -57,5 +57,5 @@ if __name__ == '__main__':
     client.connect(HOST, port=PORT, keepalive=60)
     client.loop_start()
 
-    app.run(host='0.0.0.0', port=5001, debug=False)
+    app.run(host='0.0.0.0', port=5001)
 
