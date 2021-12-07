@@ -1,17 +1,33 @@
-import './style.css';
+import './style.scss';
 import axios from 'axios';
 import Chart from 'chart.js/auto';
 
-const canvas = <HTMLCanvasElement> document.getElementById("chart");
+// Quick and dirty settings
+const intervalIn = <HTMLInputElement> document.getElementById("interval-in");
+const npointsIn = <HTMLInputElement> document.getElementById("npoints-in");
+
+let interval: string = '10 minutes'; let n_points: number = 500;
+intervalIn.value = interval; npointsIn.value = n_points.toString();
+
+intervalIn.addEventListener('input', () => {
+    interval = intervalIn.value; update();
+});
+npointsIn.addEventListener('input', () => {
+    const parsed: number = parseInt(npointsIn.value);
+    if (!isNaN(parsed)) {
+        n_points = parsed; update();
+    }
+});
 
 // Init chart
+const canvas = <HTMLCanvasElement> document.getElementById("chart");
 let chart = new Chart(canvas, {
     type: 'line',
     data: {
         labels: [0],
         datasets: [{
             data: [0],
-            label: "Fridge temperature",
+            label: "Temperature",
             borderColor: 'rgb(3, 98, 252)',
         }],
     },
@@ -25,26 +41,24 @@ let chart = new Chart(canvas, {
     },
 });
 
-function updateChart(response) {
-    const { time, data }: { time: number[]; data: number[] } = response;
-
-    chart.data.labels = time;
-    chart.data.datasets[0].data = data;
-
-    chart.update();
-}
-
 // Get data from rpi every second
-setInterval(getData, 1000); getData();
-function getData() {
+setInterval(update, 5000); update();
+function update() {
     const body = {
-        interval: '10 seconds',
-        n_points: 500,
+        interval,
+        n_points,
         sensor_id: 0,
     };
     const headers = { 'Content-Type': 'application/json' };
 
     axios.post('http://80.114.174.200:5001/data', body, { headers })
-        .then(({ data }) => updateChart(data));
+        .then(({ data: response }) => {
+            const { time, data }: { time: number[]; data: number[] } = response;
+
+            chart.data.labels = time;
+            chart.data.datasets[0].data = data;
+
+            chart.update();
+        });
 }
 
