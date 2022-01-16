@@ -41,7 +41,7 @@ let chart = new Chart(canvas, {
     },
 });
 
-// Get data from rpi every five seconds
+// Get data from RPI every five seconds
 setInterval(update, 5000); update();
 function update() {
     const body = {
@@ -51,6 +51,7 @@ function update() {
     };
     const headers = { 'Content-Type': 'application/json' };
 
+    // Access via wireguard VPN
     axios.post('http://192.168.0.180:5001/data', body, { headers })
         .then(({ data: response }) => {
             const { time, data }: { time: number[]; data: number[] } = response;
