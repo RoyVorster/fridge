@@ -1,9 +1,8 @@
 import psycopg2
 
-
+# File used for database connection
 with open('db_conn', 'r') as f:
     CONN = f.readline().strip()
-
 
 def exec_query(query, values=()):
     with psycopg2.connect(CONN) as conn:
