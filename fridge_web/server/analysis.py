@@ -5,17 +5,17 @@ from datetime import datetime
 from db import *
 
 # Retrieve data from some point to now
-def get_data(interval='1 minutes', t_back='2 days', sensor_id=0):
+def get_data(interval='1 minutes', n_points=None, sensor_id=0, t_back='1 month'):
     query = '''
         SELECT t, d FROM (
             SELECT time_bucket(%s, time) AS t, avg(data) as d
             FROM fridge.data
             WHERE sensor_id = %s AND time > NOW() - INTERVAL %s
             GROUP BY t
-            ORDER BY t DESC
+            ORDER BY t DESC LIMIT %s
         ) tt ORDER BY t ASC;
     '''
-    values = (interval, sensor_id, t_back)
+    values = (interval, sensor_id, t_back, n_points)
     res = exec_query(query, values)
 
     time, data = np.array(res).T

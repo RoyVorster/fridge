@@ -4,6 +4,7 @@ import paho.mqtt.client as mqtt
 import struct
 
 from db import *
+from analysis import *
 
 app = Flask(__name__)
 cors = CORS(app)
@@ -16,25 +17,14 @@ N_REFRESH = 1000 # Refresh DB every 1000 new datapoints
 counter = 0
 
 @app.route('/data', methods=['POST'])
-def get_data():
+def get_data_api():
     interval = request.json['interval']
     n_points = request.json['n_points']
     sensor_id = request.json['sensor_id']
 
-    query = '''
-        SELECT t, d FROM (
-            SELECT time_bucket(%s, time) AS t, avg(data) as d
-            FROM fridge.data
-            WHERE sensor_id = %s
-            GROUP BY t
-            ORDER BY t DESC LIMIT %s
-        ) tt ORDER BY t ASC;
-    '''
-    values = (interval, sensor_id, n_points)
-    res = exec_query(query, values)
-    time, data  = [r[0] for r in res], [r[1] for r in res]
+    time, data = get_data(interval=interval, n_points=n_points, sensor_id=sensor_id)
+    message = {'time': list(time), 'data': list(data)}
 
-    message = {'time': time, 'data': data}
     return jsonify(message)
 
 def cleanup_db():
