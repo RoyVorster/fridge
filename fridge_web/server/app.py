@@ -12,6 +12,9 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 # paho MQTT setup
 HOST, PORT, TOPIC = 'localhost', 1883, 'fridge/temperature'
 
+N_REFRESH = 1000 # Refresh DB every 1000 new datapoints
+counter = 0
+
 @app.route('/data', methods=['POST'])
 def get_data():
     interval = request.json['interval']
@@ -34,12 +37,19 @@ def get_data():
     message = {'time': time, 'data': data}
     return jsonify(message)
 
+def cleanup_db():
+    query = '''DELETE FROM fridge.data WHERE time < NOW() - INTERVAL '2 weeks';'''
+    exec_query(query)
+
 # PAHO event handlers
 def on_connect(client, userdata, flags, respons_code):
     client.subscribe(TOPIC)
 
 def on_message(client, userdata, msg):
+    global counter
+
     temperature = struct.unpack('f', msg.payload)[0]
+    counter += 1
 
     query = '''
         INSERT INTO fridge.data (time, data, sensor_id)
@@ -47,9 +57,15 @@ def on_message(client, userdata, msg):
     '''
     exec_query(query, (temperature,))
 
+    # Delete old datapoints every once in a while
+    if counter > N_REFRESH:
+        counter = 0
+        cleanup_db()
+
 if __name__ == '__main__':
     init_db()
 
+    # Init MQTT client
     client = mqtt.Client(protocol=mqtt.MQTTv311)
     client.on_connect = on_connect
     client.on_message = on_message
@@ -57,5 +73,6 @@ if __name__ == '__main__':
     client.connect(HOST, port=PORT, keepalive=60)
     client.loop_start()
 
+    # Start flask app
     app.run(host='0.0.0.0', port=5001)
 
