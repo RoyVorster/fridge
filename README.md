@@ -8,4 +8,4 @@
 - Store data in timescaleDB
 - VPN tunnel with VPS running really crappy front-end
 - Frequency + lo/hi temperature estimation
-    - Predict when to turn on/off
+    - Predict when to turn on/off to fall asleep in peace
