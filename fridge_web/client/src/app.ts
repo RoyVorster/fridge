@@ -2,6 +2,9 @@ import './style.scss';
 import axios from 'axios';
 import Chart from 'chart.js/auto';
 
+const ip = 'http://192.168.0.180:5001'; // Local IP, use wireguard VPN
+const headers = { 'Content-Type': 'application/json' };
+
 // Quick and dirty settings
 const intervalIn = <HTMLInputElement> document.getElementById("interval-in");
 const npointsIn = <HTMLInputElement> document.getElementById("npoints-in");
@@ -12,12 +15,20 @@ intervalIn.value = interval; npointsIn.value = n_points.toString();
 intervalIn.addEventListener('input', () => {
     interval = intervalIn.value; update();
 });
+
 npointsIn.addEventListener('input', () => {
     const parsed: number = parseInt(npointsIn.value);
     if (!isNaN(parsed)) {
         n_points = parsed; update();
     }
 });
+
+// Turn on/off command
+const tsleepIn = <HTMLInputElement> document.getElementById("tsleep-in");
+const commandOut = <HTMLSpanElement> document.getElementById("command");
+
+tsleepIn.value = '23:59';
+tsleepIn.addEventListener('input', () => get_command());
 
 // Init chart
 const canvas = <HTMLCanvasElement> document.getElementById("chart");
@@ -49,10 +60,8 @@ function update() {
         n_points,
         sensor_id: 0,
     };
-    const headers = { 'Content-Type': 'application/json' };
 
-    // Access via wireguard VPN
-    axios.post('http://192.168.0.180:5001/data', body, { headers })
+    axios.post(`${ip}/data`, body, { headers })
         .then(({ data: response }) => {
             const { time, data }: { time: number[]; data: number[] } = response;
 
@@ -63,3 +72,14 @@ function update() {
         });
 }
 
+setInterval(get_command, 5000); get_command();
+function get_command() {
+    const body = { t_sleep: tsleepIn.value };
+
+    axios.post(`${ip}/command`, body, { headers })
+        .then(({ data: response }) => {
+            const { command }: { command: string } = response;
+
+            commandOut.textContent = command;
+        });
+}
