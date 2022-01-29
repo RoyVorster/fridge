@@ -4,7 +4,7 @@ import paho.mqtt.client as mqtt
 import struct
 
 from db import *
-from analysis import *
+from analysis import get_data, get_command
 
 app = Flask(__name__)
 cors = CORS(app)
@@ -24,6 +24,15 @@ def get_data_api():
 
     time, data = get_data(interval=interval, n_points=n_points, sensor_id=sensor_id)
     message = {'time': list(time), 'data': list(data)}
+
+    return jsonify(message)
+
+@app.route('/command', methods=['POST'])
+def get_command_api():
+    t_sleep = request.json['t_sleep']
+
+    time, data = get_data(t_back='12 hours', interval='2 minutes')
+    message = {'command': get_command(time, data, t_sleep=t_sleep)}
 
     return jsonify(message)
 

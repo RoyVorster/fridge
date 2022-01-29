@@ -3,7 +3,7 @@
     <title>Amazing fridge temperature</title>
 </head>
 <body>
-    <canvas id="chart" style="width:90%;margin:0 auto;"></canvas>
+    <canvas id="chart" style="width:75%;margin:0 auto;"></canvas>
     <div class="settings">
         <div class="setting">
             <span class="name">Interval: </span>
@@ -12,6 +12,16 @@
         <div class="setting">
             <span class="name">Number of points: </span>
             <input type="text" id="npoints-in" />
+        </div>
+    </div>
+    <div class="settings">
+        <div class="setting">
+            <span class="name">Sleep time: </span>
+            <input type="text" id="tsleep-in" />
+        </div>
+        <div class="setting">
+            <span class="name">Command: </span>
+            <span class="info" id="command"></span>
         </div>
     </div>
     <script src="app.js"></script>
