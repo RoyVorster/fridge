@@ -72,7 +72,7 @@ function update() {
         });
 }
 
-setInterval(get_command, 5000); get_command();
+setInterval(get_command, 60000); get_command();
 function get_command() {
     const body = { t_sleep: tsleepIn.value };
 
