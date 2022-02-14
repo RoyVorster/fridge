@@ -37,7 +37,7 @@ def get_command_api():
     return jsonify(message)
 
 def cleanup_db():
-    query = '''DELETE FROM fridge.data WHERE time < NOW() - INTERVAL '2 weeks';'''
+    query = '''DELETE FROM fridge.data WHERE time < NOW() - INTERVAL '3 days';'''
     exec_query(query)
 
 # PAHO event handlers
@@ -48,7 +48,6 @@ def on_message(client, userdata, msg):
     global counter
 
     temperature = struct.unpack('f', msg.payload)[0]
-    counter += 1
 
     query = '''
         INSERT INTO fridge.data (time, data, sensor_id)
@@ -57,9 +56,13 @@ def on_message(client, userdata, msg):
     exec_query(query, (temperature,))
 
     # Delete old datapoints every once in a while
-    if counter > N_REFRESH:
-        counter = 0
+    if counter == 0:
         cleanup_db()
+
+    if counter >= N_REFRESH:
+        counter = 0
+
+    counter += 1
 
 if __name__ == '__main__':
     init_db()
